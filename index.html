@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guess the Output Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      max-width: 500px;
+      text-align: center;
+    }
+    pre {
+      background: #222;
+      color: #0f0;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: left;
+    }
+    .options button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      background: #007bff;
+      color: #fff;
+      transition: 0.3s;
+    }
+    .options button:hover {
+      background: #0056b3;
+    }
+    #result {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h2>Guess the Output!</h2>
+    <div class="info">
+      <span>Score: <span id="score">0</span></span>
+      <span>Time: <span id="timer">90</span>s</span>
+    </div>
+    <pre id="codeSnippet"></pre>
+    <div class="options" id="options"></div>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    const questions = [
+      { code: `int a=5, b=2;\nprintf("%d", a+++b);`, options: ["7", "6", "8", "Compiler Error"], answer: "7" },
+      { code: `int i;\nfor(i=0; i<3; i++) {\n  printf("%d ", i);\n}`, options: ["0 1 2", "1 2 3", "0 1 2 3", "Error"], answer: "0 1 2" },
+      { code: `printf("%d", 10/4);`, options: ["2.5", "2", "3", "Error"], answer: "2" },
+      { code: `int x = 10;\nprintf("%d", x++);`, options: ["10", "11", "9", "Error"], answer: "10" },
+      { code: `int x = 5;\nprintf("%d", ++x);`, options: ["5", "6", "7", "Error"], answer: "6" },
+      { code: `int a = 3, b = 4;\nprintf("%d", a*b + b/a);`, options: ["14", "13", "15", "12"], answer: "14" },
+      { code: `int arr[3] = {10, 20, 30};\nprintf("%d", arr[1]);`, options: ["10", "20", "30", "Error"], answer: "20" },
+      { code: `char c = 'A';\nprintf("%d", c);`, options: ["65", "A", "97", "Error"], answer: "65" },
+      { code: `int a = 5;\nif(a = 0) printf("Zero");\nelse printf("Non-zero");`, options: ["Zero", "Non-zero", "Error", "Nothing"], answer: "Non-zero" },
+      { code: `int x=5;\nprintf("%d", x==5);`, options: ["1", "5", "True", "Error"], answer: "1" },
+      { code: `int a = 2, b = 3;\nprintf("%d", a && b);`, options: ["1", "0", "2", "Error"], answer: "1" },
+      { code: `int a = 0, b = 5;\nprintf("%d", a || b);`, options: ["1", "0", "5", "Error"], answer: "1" },
+      { code: `int a = 5;\nprintf("%d", !a);`, options: ["0", "1", "5", "Error"], answer: "0" },
+      { code: `int x=3;\nint y = x<<1;\nprintf("%d", y);`, options: ["6", "3", "9", "Error"], answer: "6" },
+      { code: `int x=8;\nint y = x>>2;\nprintf("%d", y);`, options: ["2", "4", "8", "Error"], answer: "2" },
+      { code: `int a=5, b=10;\nprintf("%d", a>b ? a : b);`, options: ["5", "10", "0", "Error"], answer: "10" },
+      { code: `int i=0;\nwhile(i<3){ printf("%d", i); i++; }`, options: ["012", "123", "0 1 2", "Error"], answer: "012" },
+      { code: `int i;\nfor(i=0;i<5;i++);\nprintf("%d", i);`, options: ["5", "4", "0", "Error"], answer: "5" },
+      { code: `printf("%d", sizeof(int));`, options: ["2", "4", "8", "Depends"], answer: "Depends" },
+      { code: `int a=5;\nprintf("%d", a+=2);`, options: ["5", "7", "2", "Error"], answer: "7" }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let timeLeft = 90;
+    let timerInterval;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function loadQuestion() {
+      if (current >= questions.length) {
+        endGame();
+        return;
+      }
+      document.getElementById("result").innerText = "";
+      const q = questions[current];
+      document.getElementById("codeSnippet").innerText = q.code;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const q = questions[current];
+      if (selected === q.answer) {
+        document.getElementById("result").innerText = "✅ Correct!";
+        score += 10;
+      } else {
+        document.getElementById("result").innerText = `❌ Wrong! Correct: ${q.answer}`;
+      }
+      document.getElementById("score").innerText = score;
+      setTimeout(() => {
+        current++;
+        loadQuestion();
+      }, 1500);
+    }
+
+    function endGame() {
+      clearInterval(timerInterval);
+      document.getElementById("codeSnippet").innerText = "Game Over! 🎉";
+      document.getElementById("options").innerHTML = "";
+      document.getElementById("result").innerText = `Your Final Score: ${score}`;
+    }
+
+    // Start the game
+    loadQuestion();
+    startTimer();
+  </script>
+</body>
+</html>
