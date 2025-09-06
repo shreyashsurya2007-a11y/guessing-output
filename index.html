@@ -63,9 +63,9 @@
 </head>
 <body>
   <div class="game-container">
-    <h2>Guess the Output!</h2>
+    <h2>Guess the Cricketer?</h2>
     <div class="info">
-      <span>Score: <span id="score">0</span></span>
+      <span>Score: <span id="score"></span></span>
       <span>Time: <span id="timer">90</span>s</span>
     </div>
     <pre id="codeSnippet"></pre>
@@ -75,32 +75,33 @@
 
   <script>
     const questions = [
-      { code: `int a=5, b=2;\nprintf("%d", a+++b);`, options: ["7", "6", "8", "Compile Error"], answer: "7" },
-      { code: `int i;\nfor(i=0; i<3; i++) {\n  printf("%d ", i);\n}`, options: ["0 1 2", "1 2 3", "0 1 2 3", " Compile Error"], answer: "0 1 2" },
-      { code: `printf("%d", 10/4);`, options: ["2.5", "2", "3", "Compile Error"], answer: "2" },
-      { code: `int x = 10;\nprintf("%d", x++);`, options: ["10", "11", "9", "Compile Error"], answer: "10" },
-      { code: `int x = 5;\nprintf("%d", ++x);`, options: ["5", "6", "7", "Compile Error"], answer: "6" },
-      { code: `int a = 3, b = 4;\nprintf("%d", a*b + b/a);`, options: ["14", "13", "15", "12"], answer: "14" },
-      { code: `int arr[3] = {10, 20, 30};\nprintf("%d", arr[1]);`, options: ["10", "20", "30", "Compile Error"], answer: "20" },
-      { code: `char c = 'A';\nprintf("%d", c);`, options: ["65", "A", "97", "Compile Error"], answer: "65" },
-      { code: `int a = 5;\nif(a = 0) printf("Zero");\nelse printf("Non-zero");`, options: ["Zero", "Non-zero", "Compile Error", "Nothing"], answer: "Non-zero" },
-      { code: `int x=5;\nprintf("%d", x==5);`, options: ["1", "5", "True", "Compile Error"], answer: "1" },
-      { code: `int a = 2, b = 3;\nprintf("%d", a && b);`, options: ["1", "0", "2", "Compile Error"], answer: "1" },
-      { code: `int a = 0, b = 5;\nprintf("%d", a || b);`, options: ["1", "0", "5", "Compile Error"], answer: "1" },
-      { code: `int a = 5;\nprintf("%d", !a);`, options: ["0", "1", "5", "Compile Error"], answer: "0" },
-      { code: `int x=3;\nint y = x<<1;\nprintf("%d", y);`, options: ["6", "3", "9", "Compile Error"], answer: "6" },
-      { code: `int x=8;\nint y = x>>2;\nprintf("%d", y);`, options: ["2", "4", "8", "Compile Error"], answer: "2" },
-      { code: `int a=5, b=10;\nprintf("%d", a>b ? a : b);`, options: ["5", "10", "0", "Compile Error"], answer: "10" },
-      { code: `int i=0;\nwhile(i<3){ printf("%d", i); i++; }`, options: ["012", "123", "0 1 2", "Compile Error"], answer: "012" },
-      { code: `int i;\nfor(i=0;i<5;i++);\nprintf("%d", i);`, options: ["5", "4", "0", "Compile Error"], answer: "5" },
-      { code: `printf("%d", sizeof(int));`, options: ["2", "4", "8", "Depends"], answer: "Depends" },
-      { code: `int a=5;\nprintf("%d", a+=2);`, options: ["5", "7", "2", "Compile Error"], answer: "7" }
+      { code: `Who is the only cricketer to \nscore 400* runs in a single Test innings?`, options: ["A) Don Bradman", "B) Brian Lara" , "C) Chris Gayle", "D) Virender Sehwag"], answer: "B) Brian Lara" },
+      { code: `Which country won the first-ever\n ICC Cricket World Cup in 1975?`, options: ["A) West Indies", "B) Australia", "C) England", "D) India"], answer: "A) West Indies" },
+      { code: `Who holds the record for the \nfastest century in ODI cricket?`, options: ["A) Shahid Afridi", "B) AB de Villiers", "C) Corey Anderson", "D) Glenn Maxwell"], answer: "B) AB de Villiers" },
+      { code: `Who was the first batsman to score \n10,000 runs in Test cricket?`, options: ["A) Ricky Ponting", "B) Sunil Gavaskar", "C) Allan Border", "D) Sachin Tendulkar"], answer: "B) Sunil Gavaskar" },
+      { code: `Which bowler has taken the most \nwickets in Test cricket?`, options: ["A) Shane Warne", "B) Muttiah Muralitharan", "C) James Anderson", "D) Anil Kumble"], answer: "B) Muttiah Muralitharan" },
+      { code: `In which year did India win its\n first-ever Test match?`, options: ["A) 1947", "B) 1952", "C) 1955", "D) 1960"], answer: "B) 1952" },
+      { code: `Who was the first player to \nscore a double century in ODIs?`, options: ["A) Virender Sehwag", "B) Sachin Tendulkar", "C) Rohit Sharma", "D) Martin Guptill"], answer: "B) Sachin Tendulkar" },
+      { code: `Which bowler has the best \nbowling figures in a single ODI match (10 wickets)?`, options: ["A) Chaminda Vaas", "B) Glenn McGrath", "C) Shahid Afridi", "D) Anil Kumble"], answer: "A) Chaminda Vaas" },
+      { code: `Who is the youngest player \nto score a century in international cricket?`, options: ["A) Sachin Tendulkar", "B) Mohammad Ashraful", "C) Shahid Afridi", "D) Prithvi Shaw"], answer: "C) Shahid Afridi" },
+      { code: `Which team has won the \nmost ICC Cricket World Cups?`, options: ["A) India", "B) West Indies", "C) Australia", "D) England"], answer: "C) Australia" },
+      { code: `Who holds the record for the \nhighest individual score in ODI cricket?`, options: ["A) Virender Sehwag", "B) Chris Gayle", "C) Rohit Sharma", "D) Martin Guptill"], answer: "C) Rohit Sharma" },
+      { code: `Which country hosted the 1996 \nCricket World Cup final?`, options: ["A) Pakistan", "B) India", "C) Sri Lanka", "D) Bangladesh"], answer: "B) India" },
+      { code: `Who is the only player to have \nscored a century in his 100th Test match?`, options: ["A) Ricky Ponting", "B) Joe Root", "C) Colin Cowdrey", "D) Graeme Smith"], answer: "A) Ricky Ponting" },
+      { code: `Who was the first bowler to take\n 600 Test wickets?`, options: ["A) Shane Warne", "B) Anil Kumble", "C) Muttiah Muralitharan", "D) Courtney Walsh"], answer: "A) Shane Warne" },
+      { code: `Who was the first Indian cricketer to \nwin the ICC Cricketer of the Year award\n (Sir Garfield Sobers Trophy)?`, options: ["A) Rahul Dravid", "B) Sachin Tendulkar", "C) Virat Kohli", "D) MS Dhoni"], answer: "A) Rahul Dravid" },
+      { code: `Which cricketer was known \nas "The Rawalpindi Express"?`, options: ["A) Shoaib Akhtar", "B) Wasim Akram", "C) Waqar Younis", "D) Imran Khan"], answer: "A) Shoaib Akhtar" },
+      { code: `Who was the first batsman \nto be given out by the third umpire \nin cricket history?`, options: ["A) Javed Miandad", "B) Sachin Tendulkar", "C) Brian Lara", "D) Anil Kumble"], answer: "B) Sachin Tendulkar" },
+      { code: `Who is the only player to \nplay 200 Test matches?`, options: ["A) Ricky Ponting", "B) Jacques Kallis", "C) Sachin Tendulkar", "D) Kumar Sangakkara"], answer: "C) Sachin Tendulkar" },
+      { code: `Who was the first batsman to \nbe dismissed by the DRS (Decision Review System) in \ninternational cricket?`, options: ["A) Virender Sehwag", "B) Kevin Pietersen", "C) Tillakaratne Dilshan", "D) Sachin Tendulkar"], answer: "B) Kevin Pietersen" },
+      { code: `Which cricketer has the \nrecord for the most sixes in Test cricket?`, options: ["A) Chris Gayle", "B) Adam Gilchrist", "C) Ben Stokes", "D) Brendon McCullum"], answer: "D) Brendon McCullum" }
     ];
 
     let current = 0;
     let score = 0;
     let timeLeft = 90;
-    let timerInterval;
+    let timerInterval ;
+
 
     function startTimer() {
       timerInterval = setInterval(() => {
